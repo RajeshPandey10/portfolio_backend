@@ -13,7 +13,7 @@ connectDB();
 
 const app = express();
 app.use(cors({
-    origin: ['http://localhost:5173', 'https://your-frontend-domain.com'], // Replace with your frontend domain
+    origin: ['http://localhost:5173', 'https://rajeshpandey10.com.np'], // Replace with your frontend domain
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
   }));

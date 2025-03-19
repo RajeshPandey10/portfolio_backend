@@ -16,7 +16,7 @@ app.use(cors({
     origin: ['http://localhost:5173', 'https://rajeshpandey10.com.np'], // Replace with your frontend domain
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
-  }));
+}));
 app.use(express.json());
 
 // Ensure the uploads directory exists
@@ -27,6 +27,14 @@ if (!fs.existsSync(uploadsDir)) {
 
 // Serve static files from the uploads directory
 app.use('/uploads', express.static(uploadsDir));
+
+// Middleware to serve .jsx files with the correct MIME type
+app.use((req, res, next) => {
+  if (req.url.endsWith('.jsx')) {
+    res.setHeader('Content-Type', 'application/javascript');
+  }
+  next();
+});
 
 app.use('/api/contacts', contactsRoute);
 app.use('/api/projects', projectsRoute);

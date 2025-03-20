@@ -13,7 +13,7 @@ connectDB();
 
 const app = express();
 app.use(cors({
-    origin: ['http://localhost:5173', 'https://rajeshpandey10.com.np', 'https://rajesh-pandey.vercel.app/'], // Replace with your frontend domain
+    origin: '*', // Replace with your frontend domain
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
 }));

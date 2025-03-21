@@ -79,6 +79,26 @@ router.post('/projects', protectAdmin, upload.single('image'), async (req, res) 
   }
 });
 
+// Update a project (protected, with file upload)
+router.put('/projects/:id', protectAdmin, upload.single('image'), async (req, res) => {
+  try {
+    const { title, description, demoLink, githubLink } = req.body;
+    const image = req.file ? req.file.path : undefined; // Only update image if a new one is uploaded
+
+    const updatedFields = { title, description, demoLink, githubLink };
+    if (image) updatedFields.image = image;
+
+    const project = await Project.findByIdAndUpdate(req.params.id, updatedFields, {
+      new: true,
+    });
+
+    res.json(project);
+  } catch (error) {
+    console.error('Error updating project:', error);
+    res.status(500).json({ message: error.message });
+  }
+});
+
 // Delete a project (protected)
 router.delete('/projects/:id', protectAdmin, async (req, res) => {
   try {

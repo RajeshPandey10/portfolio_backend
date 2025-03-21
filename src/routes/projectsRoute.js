@@ -35,7 +35,7 @@ router.put('/:id', upload.single('image'), async (req, res) => {
     const image = req.file ? `/uploads/${req.file.filename}` : undefined; // Update image only if a new one is uploaded
 
     const updatedFields = { title, description, demoLink, githubLink };
-    if (image) updatedFields.image = image;
+    if (image) updatedFields.image = image; // Only update the image if a new one is provided
 
     const project = await Project.findByIdAndUpdate(req.params.id, updatedFields, {
       new: true, // Return the updated document

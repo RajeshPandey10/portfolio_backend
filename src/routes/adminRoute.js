@@ -83,14 +83,18 @@ router.post('/projects', protectAdmin, upload.single('image'), async (req, res) 
 router.put('/projects/:id', protectAdmin, upload.single('image'), async (req, res) => {
   try {
     const { title, description, demoLink, githubLink } = req.body;
-    const image = req.file ? req.file.path : undefined; // Only update image if a new one is uploaded
+    const image = req.file ? `/uploads/${req.file.filename}` : undefined; // Update image only if a new one is uploaded
 
     const updatedFields = { title, description, demoLink, githubLink };
-    if (image) updatedFields.image = image;
+    if (image) updatedFields.image = image; // Only update the image if a new one is provided
 
     const project = await Project.findByIdAndUpdate(req.params.id, updatedFields, {
-      new: true,
+      new: true, // Return the updated document
     });
+
+    if (!project) {
+      return res.status(404).json({ message: 'Project not found' });
+    }
 
     res.json(project);
   } catch (error) {

@@ -28,6 +28,30 @@ router.post('/', upload.single('image'), async (req, res) => {
   }
 });
 
+// Update a project (for admin)
+router.put('/:id', upload.single('image'), async (req, res) => {
+  try {
+    const { title, description, demoLink, githubLink } = req.body;
+    const image = req.file ? `/uploads/${req.file.filename}` : undefined; // Update image only if a new one is uploaded
+
+    const updatedFields = { title, description, demoLink, githubLink };
+    if (image) updatedFields.image = image;
+
+    const project = await Project.findByIdAndUpdate(req.params.id, updatedFields, {
+      new: true, // Return the updated document
+    });
+
+    if (!project) {
+      return res.status(404).json({ message: 'Project not found' });
+    }
+
+    res.json(project);
+  } catch (error) {
+    console.error('Error updating project:', error);
+    res.status(500).json({ message: error.message });
+  }
+});
+
 // Delete a project (for admin)
 router.delete('/:id', async (req, res) => {
   try {
